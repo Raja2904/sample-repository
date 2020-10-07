@@ -1,0 +1,212 @@
+hello lalalalalajjjjj
+huhuhuhuhuhuh
+Command Line Options
+The mongo shell can be started with numerous options. See mongo shell page for details on all available options.
+
+The following table displays some common options for mongo:
+
+Option	Description
+--help	Show command line options
+--nodb	
+Start mongo shell without connecting to a database.
+
+To connect later, see Opening New Connections.
+
+--shell	
+Used in conjunction with a JavaScript file (i.e. <file.js>) to continue in the mongo shell after running the JavaScript file.
+
+See JavaScript file for an example.
+
+Command Helpers
+The mongo shell provides various help. The following table displays some common help methods and commands:
+
+Help Methods and Commands	Description
+help	Show help.
+db.help()	Show help for database methods.
+db.<collection>.help()	Show help on collection methods. The <collection> can be the name of an existing collection or a non-existing collection.
+show dbs	
+Print a list of all databases on the server.
+
+The operation corresponds to the listDatabases command. If the deployment runs with access control, the operation returns different values based on user privileges. See listDatabases Behavior for details.
+
+use <db>	Switch current database to <db>. The mongo shell variable db is set to the current database.
+show collections	
+Print a list of all collections for current database.
+
+SEE ALSO
+
+show collections
+
+show users	Print a list of users for current database.
+show roles	Print a list of all roles, both user-defined and built-in, for the current database.
+show profile	Print the five most recent operations that took 1 millisecond or more. See documentation on the database profiler for more information.
+show databases	
+Print a list of all available databases.
+
+The operation corresponds to the listDatabases command. If the deployment runs with access control, the operation returns different values based on user privileges. See listDatabases Behavior for details.
+
+load()	Execute a JavaScript file. See Write Scripts for the mongo Shell for more information.
+Basic Shell JavaScript Operations
+The mongo shell provides a JavaScript API for database operations.
+
+In the mongo shell, db is the variable that references the current database. The variable is automatically set to the default database test or is set when you use the use <db> to switch current database.
+
+The following table displays some common JavaScript operations:
+
+JavaScript Database Operations	Description
+db.auth()	If running in secure mode, authenticate the user.
+coll = db.<collection>	
+Set a specific collection in the current database to a variable coll, as in the following example:
+
+coll = db.myCollection;
+You can perform operations on the myCollection using the variable, as in the following example:
+
+coll.find();
+db.collection.find()	
+Find all documents in the collection and returns a cursor.
+
+See the db.collection.find() and Query Documents for more information and examples.
+
+See Iterate a Cursor in the mongo Shell for information on cursor handling in the mongo shell.
+
+db.collection.insertOne()	Insert a new document into the collection.
+db.collection.insertMany()	Insert multiple new documents into the collection.
+db.collection.updateOne()	Update a single existing document in the collection.
+db.collection.updateMany()	Update multiple existing documents in the collection.
+db.collection.save()	Insert either a new document or update an existing document in the collection.
+db.collection.deleteOne()	Delete a single document from the collection.
+db.collection.deleteMany()	Delete documents from the collection.
+db.collection.drop()	Drops or removes completely the collection.
+db.collection.createIndex()	Create a new index on the collection if the index does not exist; otherwise, the operation has no effect.
+db.getSiblingDB()	Return a reference to another database using this same connection without explicitly switching the current database. This allows for cross database queries.
+For more information on performing operations in the shell, see:
+
+MongoDB CRUD Operations
+mongo Shell Methods
+Keyboard Shortcuts
+The mongo shell provides most keyboard shortcuts similar to those found in the bash shell or in Emacs. For some functions mongo provides multiple key bindings, to accommodate several familiar paradigms.
+
+The following table enumerates the keystrokes supported by the mongo shell:
+
+Keystroke	Function
+Up-arrow	previous-history
+Down-arrow	next-history
+Home	beginning-of-line
+End	end-of-line
+Tab	autocomplete
+Left-arrow	backward-character
+Right-arrow	forward-character
+Ctrl-left-arrow	backward-word
+Ctrl-right-arrow	forward-word
+Meta-left-arrow	backward-word
+Meta-right-arrow	forward-word
+Ctrl-A	beginning-of-line
+Ctrl-B	backward-char
+Ctrl-C	exit-shell
+Ctrl-D	delete-char (or exit shell)
+Ctrl-E	end-of-line
+Ctrl-F	forward-char
+Ctrl-G	abort
+Ctrl-J	accept-line
+Ctrl-K	kill-line
+Ctrl-L	clear-screen
+Ctrl-M	accept-line
+Ctrl-N	next-history
+Ctrl-P	previous-history
+Ctrl-R	reverse-search-history
+Ctrl-S	forward-search-history
+Ctrl-T	transpose-chars
+Ctrl-U	unix-line-discard
+Ctrl-W	unix-word-rubout
+Ctrl-Y	yank
+Ctrl-Z	Suspend (job control works in linux)
+Ctrl-H (i.e. Backspace)	backward-delete-char
+Ctrl-I (i.e. Tab)	complete
+Meta-B	backward-word
+Meta-C	capitalize-word
+Meta-D	kill-word
+Meta-F	forward-word
+Meta-L	downcase-word
+Meta-U	upcase-word
+Meta-Y	yank-pop
+Meta-[Backspace]	backward-kill-word
+Meta-<	beginning-of-history
+Meta->	end-of-history
+Queries
+In the mongo shell, perform read operations using the find() and findOne() methods.
+
+The find() method returns a cursor object which the mongo shell iterates to print documents on screen. By default, mongo prints the first 20. The mongo shell will prompt the user to “Type it” to continue iterating the next 20 results.
+
+The following table provides some common read operations in the mongo shell:
+
+Read Operations	Description
+db.collection.find(<query>)	
+Find the documents matching the <query> criteria in the collection. If the <query> criteria is not specified or is empty (i.e {} ), the read operation selects all documents in the collection.
+
+The following example selects the documents in the users collection with the name field equal to "Joe":
+
+coll = db.users;
+coll.find( { name: "Joe" } );
+For more information on specifying the <query> criteria, see Specify Equality Condition.
+
+db.collection.find(<query>, <projection>)	
+Find documents matching the <query> criteria and return just specific fields in the <projection>.
+
+The following example selects all documents from the collection but returns only the name field and the _id field. The _id is always returned unless explicitly specified to not return.
+
+coll = db.users;
+coll.find( { }, { name: true } );
+For more information on specifying the <projection>, see Project Fields to Return from Query.
+
+db.collection.find().sort(<sort order>)	
+Return results in the specified <sort order>.
+
+The following example selects all documents from the collection and returns the results sorted by the name field in ascending order (1). Use -1 for descending order:
+
+coll = db.users;
+coll.find().sort( { name: 1 } );
+db.collection.find(<query>).sort(<sort order>)	Return the documents matching the <query> criteria in the specified <sort order>.
+db.collection.find( ... ).limit( <n> )	Limit result to <n> rows. Highly recommended if you need only a certain number of rows for best performance.
+db.collection.find( ... ).skip( <n> )	Skip <n> results.
+db.collection.count()	Returns total number of documents in the collection.
+db.collection.find(<query>).count()	
+Returns the total number of documents that match the query.
+
+The count() ignores limit() and skip(). For example, if 100 records match but the limit is 10, count() will return 100. This will be faster than iterating yourself, but still take time.
+
+db.collection.findOne(<query>)	
+Find and return a single document. Returns null if not found.
+
+The following example selects a single document in the users collection with the name field matches to "Joe":
+
+coll = db.users;
+coll.findOne( { name: "Joe" } );
+Internally, the findOne() method is the find() method with a limit(1).
+
+See Query Documents documentation for more information and examples. See Query and Projection Operators to specify other query operators.
+
+Error Checking Methods
+The mongo shell write method integrates the Write Concern directly into the method execution, and returns a WriteResult() object that contains the results of the operation, including any write errors and write concern errors.
+
+Administrative Command Helpers
+The following table lists some common methods to support database administration:
+
+JavaScript Database Administration Methods	Description
+db.fromColl.renameCollection(<toColl>)	Rename collection from fromColl to <toColl>. See Naming Restrictions.
+db.getCollectionNames()	Get the list of all collections in the current database.
+db.dropDatabase()	Drops the current database.
+See also administrative database methods for a full list of methods.
+
+Opening Additional Connections
+You can create new connections within the mongo shell.
+
+The following table displays the methods to create the connections:
+
+JavaScript Connection Create Methods	Description
+db = connect("<host><:port>/<dbname>")
+Open a new database connection.
+conn = new Mongo()
+db = conn.getDB("dbname")
+Open a connection to a new server using new Mongo().
+
+Use getDB() method of the connection to select a database.
